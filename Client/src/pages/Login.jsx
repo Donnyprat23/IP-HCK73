@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import instance2 from "../helpers/instance2";
 import LoginGoogle from "../components/LoginGoogle";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,8 +13,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-
-      let {data} = await instance2({
+      let { data } = await instance2({
         url: "/login",
         method: "POST",
         data: {
@@ -25,8 +25,20 @@ const Login = () => {
 
       localStorage.setItem("access_token", data.access_token);
       navigate("/");
+      Swal.fire({
+        title: "Welcome to Shakeel News!",
+        text: "Enjoy!",
+        icon: "success",
+      });
     } catch (error) {
       console.log(error);
+      if (error.response) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data.message,
+        });
+      }
     }
   };
 
@@ -37,9 +49,7 @@ const Login = () => {
           <div className=" bg-white border border-gray-300 rounded-lg p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto">
             <form onSubmit={handleLogin} className=" space-y-4">
               <div className="mb-8">
-                <h3 className="text-black text-3xl font-extrabold">
-                  Sign in
-                </h3>
+                <h3 className="text-black text-3xl font-extrabold">Sign in</h3>
                 <p className="text-bg-black text-sm mt-4 leading-relaxed">
                   Sign in to your account and explore a world of possibilities.
                   Your journey begins here.
@@ -47,9 +57,7 @@ const Login = () => {
               </div>
 
               <div>
-                <label className="text-black text-sm mb-2 block">
-                  Email
-                </label>
+                <label className="text-black text-sm mb-2 block">Email</label>
                 <div className="relative flex items-center">
                   <input
                     value={email}
@@ -123,12 +131,13 @@ const Login = () => {
                 >
                   Log in
                 </button>
-                <LoginGoogle/>
+                <LoginGoogle />
               </div>
 
               <p className="text-sm !mt-8 text-center text-gray-800">
                 Don't have an account{" "}
-                <Link to={"/register"}
+                <Link
+                  to={"/register"}
                   href="javascript:void(0);"
                   className="text-blue-950 font-semibold hover:underline ml-1 whitespace-nowrap"
                 >

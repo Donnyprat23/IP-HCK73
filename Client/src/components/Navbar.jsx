@@ -4,14 +4,10 @@ const Navbar = () => {
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900 sticky top-0 z-50">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a
-          href="https://flowbite.com/"
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
+        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <img
-            src="https://images.unsplash.com/photo-1574613427366-eaed90626815?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGNsdWJzfGVufDB8fDB8fHww"
+            src="https://i.ibb.co.com/6PWsxt4/SHAKEEL-NEWS-Logo-Black-with-White-Background-5000x5000.png"
             className="h-20"
-            alt="Flowbite Logo"
           />
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
             Shakeel News

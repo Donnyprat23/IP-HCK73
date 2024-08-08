@@ -10,7 +10,7 @@ router.get("/user", isAuthenticate, UserController.getUser);
 router.put("/editprofile", isAuthenticate, UserController.EditProfile);
 router.delete("/deleteprofile", isAuthenticate, UserController.DeleteProfile);
 
-router.post("/search", NewsController.searchAi);
-router.get("/home", NewsController.ShowAllNews);
+router.post("/search", isAuthenticate, NewsController.searchAi);
+router.get("/home", isAuthenticate, NewsController.ShowAllNews);
 
 module.exports = router;

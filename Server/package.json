@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "bin/www",
   "scripts": {
-    "test": "npx jest --verbose --detectOpenHandles --forceExit",
+    "test": "npx jest --verbose --detectOpenHandles --forceExit --coverage",
     "start": "npx nodemon bin/www"
   },
   "keywords": [],

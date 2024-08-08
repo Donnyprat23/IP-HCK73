@@ -24,6 +24,11 @@ const Register = () => {
         },
       });
       navigate("/login");
+      Swal.fire({
+        title: "Congratulation!",
+        text: "You have Successfully Register!",
+        icon: "success"
+      });
     } catch (error) {
         console.log(error);
       if (error.response) {
