@@ -1,48 +1,92 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import instance2 from "../helpers/instance2";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const Register = () => {
+const User = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
 
-  const HandleRegister = async (e) => {
+  useEffect(() => {
+    readUser();
+  }, []);
+
+  const readUser = async (e) => {
+    try {
+      let { data } = await instance2({
+        url: "/user",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+
+      setUsername(data.username);
+      setEmail(data.email);
+      setPassword(data.password);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEditProfile = async (e) => {
     e.preventDefault();
 
     try {
       await instance2({
-        url: "/register",
-        method: "POST",
+        url: "/editprofile",
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
         data: {
           username,
           email,
-          password,
         },
       });
-      navigate("/login");
+      navigate("/");
+      Swal.fire({
+        title: "Mantaap!",
+        text: "You have Successfully Edit Profile!",
+        icon: "success",
+      });
     } catch (error) {
-        console.log(error);
-      if (error.response) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: error.response.data.message,
-        });
-      }
+      console.log(error);
+    }
+  };
+  const handleDeleteProfile = async (e) => {
+    e.preventDefault();
+
+    try {
+      await instance2({
+        url: "/deleteprofile",
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      localStorage.clear();
+      navigate("/login");
+      Swal.fire({
+        title: "Mantaap!",
+        text: "You have Successfully Delete Profile!",
+        icon: "success",
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
-    <div className="bg-white font-[sans-serif] rounded-md">
+    <div className="font-[sans-serif]">
       <div className="min-h-screen flex fle-col items-center justify-center p-6">
         <div className="grid lg:grid-cols-2 items-center gap-6 max-w-7xl max-lg:max-w-xl w-full">
-          <form onSubmit={HandleRegister} className="lg:max-w-md w-full">
+          <form onSubmit={handleEditProfile} className="lg:max-w-md w-full">
             <h3 className="text-black text-3xl font-extrabold mb-12">
-              Create your account
+              User Profile
             </h3>
             <div className="space-y-6">
               <div>
@@ -81,34 +125,29 @@ const Register = () => {
                   placeholder="Password"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
             </div>
-            <div className="mt-12">
-              <button
-                className="py-4 px-8 text-sm font-semibold text-white tracking-wide bg-blue-600 hover:bg-blue-700 focus:outline-none"
-                type="submit"
-              >
-                REGISTER
-              </button>
-            </div>
-            <p className="text-sm text-black mt-6">
-              You have account?{" "}
-              <Link
-                to={"/login"}
-                className="text-blue-600 font-semibold hover:underline ml-1"
-                href="javascript:void(0);"
-              >
-                Login Now
-              </Link>
-            </p>
+            <button
+              type="submit"
+              class=" px-5 py-2.5 rounded-lg text-white text-sm tracking-wider font-medium border border-current outline-none bg-blue-700 hover:bg-blue-800 active:bg-blue-700"
+            >
+              Update
+            </button>
+
+            <button
+              onClick={handleDeleteProfile}
+              type="button"
+              class=" px-5 py-2.5 rounded-lg text-white text-sm tracking-wider font-medium border border-current outline-none bg-red-700 hover:bg-red-800 active:bg-blue-700"
+            >
+              Delete
+            </button>
           </form>
           <div className="h-full max-lg:mt-12">
             <img
               alt="Dining Experience"
               className="w-full h-full object-cover rounded-md"
-              src="https://images.unsplash.com/photo-1570179538662-faa5e38e9d8f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bmV3c3xlbnwwfHwwfHx8MA%3D%3D"
+              src="https://images.unsplash.com/photo-1621600411688-4be93cd68504?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZWRpdHxlbnwwfHwwfHx8MA%3D%3D"
             />
           </div>
         </div>
@@ -117,4 +156,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default User;

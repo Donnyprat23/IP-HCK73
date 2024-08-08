@@ -4,7 +4,8 @@ const { comparePassword } = require("../helpers/bcrypt.js");
 const { signToken } = require("../helpers/jwt.js");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client();
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { where } = require("sequelize");
 
 class UserController {
   static async registerUser(req, res, next) {
@@ -20,13 +21,14 @@ class UserController {
         msg: `berhasil register dengan id dan email ${createdUser.email}`,
       });
     } catch (error) {
-      // next(error);
-      console.log(error);
+      next(error);
+      // console.log(error);
     }
   }
 
   static async loginUser(req, res, next) {
     const { email, password } = req.body;
+    console.log(req.body, "ini req body");
     try {
       if (!email) {
         throw { name: "invalid email/password" };
@@ -40,19 +42,19 @@ class UserController {
         throw { name: "Invalid user" };
       }
       const isPasswordValid = comparePassword(password, user.password);
+      console.log(password);
       if (!isPasswordValid) {
         throw { name: "Invalid user" };
       }
 
       const access_token = signToken({ userId: user.id });
-
       res.status(200).json({ access_token });
     } catch (error) {
-      // next(error);
-      console.log(error);
+      next(error);
+      // res.send(error.message);
     }
   }
-  static async googleLogin(req,res,next) {
+  static async googleLogin(req, res, next) {
     const { email, googleToken } = req.body;
     try {
       const ticket = await client.verifyIdToken({
@@ -62,7 +64,7 @@ class UserController {
       });
       const payload = ticket.getPayload();
       const [user, created] = await User.findOrCreate({
-        where: { email },
+        where: { email: payload.email },
         defaults: {
           username: payload.name,
           email: payload.email,
@@ -76,8 +78,51 @@ class UserController {
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
       res.status(created ? 201 : 200).json({ access_token: token });
     } catch (error) {
+      // next(error);
       console.log(error);
-      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  static async getUser(req, res, next) {
+    const { id } = req.user;
+    try {
+      let findUser = await User.findByPk(+id);
+      res.status(200).json(findUser);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async EditProfile(req, res, next) {
+    const { id } = req.user;
+    const { username, email } = req.body;
+    try {
+      const updateProfile = await User.update(
+        {
+          username,
+          email,
+        },
+        {
+          where: { id },
+        }
+      );
+      res.status(200).json({
+        message: `Successfully Update Profile`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async DeleteProfile(req, res, next) {
+    const { id } = req.user;
+    try {
+      const DeleteProfile = await User.destroy({
+        where: { id },
+      });
+      res.status(200).json({
+        message: `Successfully Delete Profile`,
+      });
+    } catch (error) {
+      next(error);
     }
   }
 }

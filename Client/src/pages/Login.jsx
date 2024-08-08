@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import instance2 from "../helpers/instance2";
+import LoginGoogle from "../components/LoginGoogle";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -30,13 +31,13 @@ const Login = () => {
   };
 
   return (
-    <div className="font-[sans-serif] bg-white">
+    <div className="font-[sans-serif] bg-blue-950">
       <div className="min-h-screen flex fle-col items-center justify-center py-6 px-4">
         <div className="grid md:grid-cols-2 items-center gap-4 max-w-6xl w-full">
           <div className=" bg-white border border-gray-300 rounded-lg p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto">
             <form onSubmit={handleLogin} className=" space-y-4">
               <div className="mb-8">
-                <h3 className="text-gray-800 text-3xl font-extrabold">
+                <h3 className="text-black text-3xl font-extrabold">
                   Sign in
                 </h3>
                 <p className="text-bg-black text-sm mt-4 leading-relaxed">
@@ -46,7 +47,7 @@ const Login = () => {
               </div>
 
               <div>
-                <label className="text-gray-800 text-sm mb-2 block">
+                <label className="text-black text-sm mb-2 block">
                   Email
                 </label>
                 <div className="relative flex items-center">
@@ -82,7 +83,7 @@ const Login = () => {
                 </div>
               </div>
               <div>
-                <label className="text-gray-800 text-sm mb-2 block">
+                <label className="text-black text-sm mb-2 block">
                   Password
                 </label>
                 <div className="relative flex items-center">
@@ -118,20 +119,21 @@ const Login = () => {
                 <button
                   onClick={handleLogin}
                   type="button"
-                  className="w-full shadow-xl py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-teal-600 hover:bg-blue-700 focus:outline-none"
+                  className="w-full shadow-xl py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-950 focus:outline-none"
                 >
                   Log in
                 </button>
+                <LoginGoogle/>
               </div>
 
               <p className="text-sm !mt-8 text-center text-gray-800">
                 Don't have an account{" "}
-                <a
+                <Link to={"/register"}
                   href="javascript:void(0);"
-                  className="text-teal-600 font-semibold hover:underline ml-1 whitespace-nowrap"
+                  className="text-blue-950 font-semibold hover:underline ml-1 whitespace-nowrap"
                 >
                   Register here
-                </a>
+                </Link>
               </p>
             </form>
           </div>

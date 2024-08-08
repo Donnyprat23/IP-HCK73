@@ -7,6 +7,8 @@ import Home from "./pages/Home";
 import Layout from "./pages/Layout";
 import Register from "./pages/register";
 import Login from "./pages/Login";
+import { redirect } from "react-router-dom";
+import User from "./pages/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +38,14 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/editprofile",
+        element: <User />,
+      },
+      {
+        path: "/deleteprofile",
+        element: <User />,
       },
     ],
   },

@@ -14,18 +14,6 @@ const Card = (props) => {
         {data.title}
       </h3>
       <div className="p-6 flex justify-center mx-5 py-5">
-        <button
-          type="button"
-          className="px-5 py-2.5 rounded-lg text-white text-sm tracking-wider font-medium border border-current outline-none bg-green-500 hover:bg-green-600 active:bg-green-500"
-        >
-          Add
-        </button>
-        <button
-          type="button"
-          className="px-5 py-2.5 rounded-lg text-white text-sm tracking-wider font-medium border border-current outline-none bg-red-700 hover:bg-red-600 active:bg-red-700"
-        >
-          Delete
-        </button>
       </div>
     </div>
   );
